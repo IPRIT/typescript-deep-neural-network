@@ -13,7 +13,7 @@ let classes = [];
 while (cores.length < classesNumber) {
     let generatedPoint = Point.generatePoint(rank);
     if (cores.length) {
-        var minDistance = Math.min( ...generatedPoint.distanceToAll(cores) );
+        let minDistance = Math.min( ...generatedPoint.distanceToAll(cores) );
         if (minDistance > minDistanceBetween) {
             cores.push(generatedPoint);
         }
