@@ -9,7 +9,7 @@ class Point {
 
     static generatePoint(rank) {
         rank = rank || Point.defaultRank();
-        let coords = [ ...Point.randomCoordGenerator( -10000, 10000, rank )() ];
+        let coords = [ ...Point.randomCoordGenerator( -1000, 1000, rank )() ];
         return new Point( rank, coords );
     }
 
@@ -20,9 +20,13 @@ class Point {
         let currentIt = 0;
         return function* () {
             while (currentIt++ < count) {
-                yield Math.floor(Math.random() * (max - min + 1)) + min;
+                yield Point.randomNumber(min, max);
             }
         };
+    }
+
+    static randomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     static randomCoordGeneratorInArea(minOffsets, maxOffsets, count) {
@@ -36,9 +40,10 @@ class Point {
         let currentIt = 0;
         return function* () {
             while (currentIt++ < count) {
-                yield Math.floor(
-                    Math.random() * (maxOffsets[ currentIt - 1 ] - minOffsets[ currentIt - 1 ] + 1)
-                ) + minOffsets[ currentIt - 1 ];
+                yield Point.randomNumber(
+                    minOffsets[ currentIt - 1 ],
+                    maxOffsets[ currentIt - 1 ]
+                );
             }
         };
     }

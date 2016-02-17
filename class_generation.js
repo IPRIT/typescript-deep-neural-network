@@ -4,11 +4,12 @@ let Point = require('./Point');
 
 const classesNumber = 10;
 const rank = 10;
-const pointsNumber = 100;
-const minDistanceBetween = 1000;
+const pointsNumber = 5;
+const minDistanceBetween = 100;
 
 let cores = [];
 let classes = [];
+let IS_FIRST_TASK = process.argv.indexOf('first') >= 0;
 
 while (cores.length < classesNumber) {
     let generatedPoint = Point.generatePoint(rank);
@@ -28,9 +29,16 @@ cores.forEach(center => {
         points: [],
         radius: minDistanceBetween / 2
     };
+    if (!IS_FIRST_TASK) {
+        let prob = Point.randomNumber(0, 1);
+        if (prob) {
+            currentClass.radius *= 2;
+        }
+    }
     for (let i = 0; i < pointsNumber; ++i) {
         currentClass.points.push( Point.generateInArea(center, currentClass.radius) );
     }
     classes.push(currentClass);
-    //console.log(center, currentClass.points, Math.min(...center.distanceToAll(currentClass.points)));
+    console.log('-'.repeat(5), 'Class:', classes.length, '-'.repeat(5));
+    console.log(center, currentClass.points, Math.max(...center.distanceToAll(currentClass.points)));
 });
