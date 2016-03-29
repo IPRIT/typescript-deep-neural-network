@@ -1,6 +1,6 @@
-# neural-class-generation-es6
-A simple hyper class generation on ES2015
+# neural-network-es6
+A deep neural network written on ES2015: (Class classifying, Iris data learning)
 
 ```
-$ node class_generation.js --harmony
+$ npm run install && npm run start
 ```
