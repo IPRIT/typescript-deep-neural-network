@@ -1,7 +1,7 @@
 interface IMixerProvider<T> {
 
     mix(input: T, callback?: Function): T;
-    mixAll(input: T, output: T): any;
+    mixAll(input: T, output: T): T[];
 }
 
 export class DataMixer implements IMixerProvider<number[][]> {
