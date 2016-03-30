@@ -1,5 +1,6 @@
 import ClassGenerator from '../Generator/ClassGenerator';
 import * as Config from '../Generator/config';
+//noinspection TypeScriptCheckImport
 import * as fs from 'fs';
 
 interface IDataProvider {
@@ -31,14 +32,17 @@ export class TestDataProvider implements IDataProvider {
     if (!this.isGenerated) {
       this.generate();
     }
-    let output = new Array(this.data.length);
     return this.data.map((cluster, clusterIndex) => {
-      output[clusterIndex] = new Array(cluster.points.length);
+      let clusterOutput = []; //вектора кластера
       cluster.points.forEach((vector, vectorIndex) => {
-        //TODO: continue
-        output[clusterIndex][vectorIndex] = +(clusterIndex)
-      })
-
+        clusterOutput[vectorIndex] = Array
+            .apply(null, Array(this.data.length))
+            .map(Number.prototype.valueOf, 0)
+            .map((scalar, scalarIndex) => {
+              return +(scalarIndex === clusterIndex);
+            });
+      });
+      return clusterOutput;
     }).reduce((accumulator, currentSet) => {
       return accumulator.concat(currentSet);
     }, []);
@@ -58,24 +62,43 @@ export class TestDataProvider implements IDataProvider {
 export class IrisDataProvider implements IDataProvider {
 
   outputs: number[] = [];
+  private data: any;
+  private isInit: boolean = false;
+  private classes: number = 3;
 
   getInput() {
-    let data = fs.readFileSync('./Neuro/Data/input/iris.txt', 'utf8');
-    //todo: notice that line-breaking chars available only for Windows
-    return data.split('\r\n').map(line => {
-      let arr = line.trim().split(/\s/).map(numberAsString => +numberAsString);
-      this.outputs.push(<number>+arr.slice(-1));
-      return arr.slice(0, -1);
+    if (!this.isInit) {
+      this.initialize();
+    }
+    return <number[][]>this.data.map(vector => {
+      vector.pop();
+      return vector;
     });
   }
 
   getOutput() {
+    if (!this.isInit) {
+      this.initialize();
+    }
+    return <number[][]>this.data.map(vector => {
+      let classNumber = vector.pop();
+      return Array
+          .apply(null, Array(this.classes))
+          .map(Number.prototype.valueOf, 0)
+          .map((x, i) => {
+            return +(i === classNumber);
+          });
+    });
+  }
+
+  initialize() {
+    //noinspection TypeScriptUnresolvedFunction
     let data = fs.readFileSync('./Neuro/Data/input/iris.txt', 'utf8');
-    //todo: notice that line-breaking chars available only for Windows
-    return data.split('\r\n').map(line => {
-      let arr = line.trim().split(/\s/).map(numberAsString => +numberAsString);
-      this.outputs.push(<number>+arr.slice(-1));
-      return arr.slice(0, -1);
+    //noinspection TypeScriptUnresolvedVariable
+    let isWin = /^win/.test(process.platform);
+    let splitChars = isWin ? '\r\n' : '\n';
+    this.data = data.split(splitChars).map(line => {
+      return line.trim().split(/\s/).map(parseFloat);
     });
   }
 }

@@ -1,10 +1,10 @@
 {
-  "name": "neuralnet-es6",
+  "name": "Typescript-deep-neural-network",
   "version": "1.0.0",
-  "description": "A deep neural network written on ES2015: (Class classifying, Iris data learning)",
+  "description": "A deep neural network written on ES2015/TypeScript: (Class classifying, Iris data learning)",
   "scripts": {
-    "install": "npm i -g tsd && npm i -g tsc && tsd install",
-    "start": "tsc && node app.js --harmony"
+    "install": "sudo npm i -g tsd && sudo npm i -g tsc && sudo tsd install",
+    "start": "sudo tsc && sudo node app.js --harmony"
   },
   "repository": {
     "type": "git",
@@ -13,6 +13,7 @@
   "keywords": [
     "neural",
     "network",
+    "deep neural",
     "es6",
     "es2015",
     "typescript"
@@ -20,7 +21,7 @@
   "author": "Alexander Belov",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/IPRIT/neural-class-generation-es6/issues"
+    "url": "https://github.com/IPRIT/typescript-deep-neural-network/issues"
   },
-  "homepage": "https://github.com/IPRIT/neural-class-generation-es6#readme"
+  "homepage": "https://github.com/IPRIT/typescript-deep-neural-network#readme"
 }

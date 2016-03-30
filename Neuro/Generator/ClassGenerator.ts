@@ -1,3 +1,6 @@
+//noinspection TypeScriptUnresolvedFunction
+let class_generation = require('./Lab01/class_generation');
+
 interface IGenerable {
   generate(...params): any;
 }
@@ -22,7 +25,7 @@ export default class ClassGenerator implements IGenerable, IConfigurable {
   config : IGeneratorConfig = null;
 
   generate(...args) {
-    let class_generation = require('../../Lab01/class_generation');
+    
     if (this.configured) {
       let params = this.config;
       return class_generation.generate(
