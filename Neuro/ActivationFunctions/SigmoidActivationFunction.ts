@@ -1,6 +1,6 @@
-import * as IActivationFunction from './IActivationFunction';
+import {IActivationFunction} from './IActivationFunction';
 
-class SigmoidActivationFunction implements IActivationFunction {
+export class SigmoidActivationFunction implements IActivationFunction {
 
   compute(x) {
     return 1 / (1 + Math.exp(-x));

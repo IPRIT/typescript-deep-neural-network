@@ -2,30 +2,36 @@
 
 let Point = require('./Point');
 
-const _classesNumber = 10;
-const _rank = 10;
-const _pointsNumber = 5;
+const _classNumber = 3;
+const _classDimension = 2;
+const _classPointsNumber = 50;
 const _minDistanceBetween = 100;
+const _minBoundary = -1000;
+const _maxBoundary = 1000;
 
 /**
- * @param {boolean} crossNeeded
- * @param {number} classesNumber
- * @param {number} rank
- * @param {number} pointsNumber
+ * @param {boolean} cross
+ * @param {number} classNumber
+ * @param {number} classDimension
+ * @param {number} classPointsNumber
  * @param {number} minDistanceBetween
+ * @param {number} minBoundary
+ * @param {number} maxBoundary
  * @returns {Array} Array of classes
  */
-function generate(crossNeeded, classesNumber, rank, pointsNumber, minDistanceBetween) {
-    classesNumber = classesNumber || _classesNumber;
-    rank = rank || _rank;
-    pointsNumber = pointsNumber || _pointsNumber;
+function generate(cross, classNumber, classDimension, classPointsNumber, minDistanceBetween, minBoundary, maxBoundary) {
+    classNumber = classNumber || _classNumber;
+    classDimension = classDimension || _classDimension;
+    classPointsNumber = classPointsNumber || _classPointsNumber;
     minDistanceBetween = minDistanceBetween || _minDistanceBetween;
+    minBoundary = minBoundary || _minBoundary;
+    maxBoundary = maxBoundary || _maxBoundary;
 
     let cores = [];
     let classes = [];
 
-    while (cores.length < classesNumber) {
-        let generatedPoint = Point.generatePoint(rank);
+    while (cores.length < classNumber) {
+        let generatedPoint = Point.generatePoint(classDimension, minBoundary, maxBoundary);
         if (cores.length) {
             let minDistance = Math.min( ...generatedPoint.distanceToAll(cores) );
             if (minDistance > minDistanceBetween) {
@@ -42,13 +48,13 @@ function generate(crossNeeded, classesNumber, rank, pointsNumber, minDistanceBet
             points: [],
             radius: minDistanceBetween / 2
         };
-        if (crossNeeded) {
+        if (cross) {
             let prob = Point.randomNumber(0, 1);
             if (prob) {
                 currentClass.radius *= 2;
             }
         }
-        for (let i = 0; i < pointsNumber; ++i) {
+        for (let i = 0; i < classPointsNumber; ++i) {
             currentClass.points.push( Point.generateInArea(center, currentClass.radius) );
         }
         classes.push(currentClass);

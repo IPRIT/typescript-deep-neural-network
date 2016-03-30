@@ -7,9 +7,9 @@ class Point {
         this.coords = coords || [];
     }
 
-    static generatePoint(rank) {
+    static generatePoint(rank, minBoundary, maxBoundary) {
         rank = rank || Point.defaultRank();
-        let coords = [ ...Point.randomCoordGenerator( -1000, 1000, rank )() ];
+        let coords = [ ...Point.randomCoordGenerator( minBoundary, maxBoundary, rank )() ];
         return new Point( rank, coords );
     }
 

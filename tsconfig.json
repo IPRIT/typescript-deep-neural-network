@@ -1,10 +1,16 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "sourceMap": true
+    "sourceMap": true,
+    "target": "ES5",
+    "experimentalDecorators": true
   },
-  "files": [
-    "./typings/tsd.d.ts",
-    "./app.ts"
-  ]
+  "filesGlob": [
+    "**/*.ts",
+    "**/*.tsx",
+    "!node_modules/**"
+  ],
+  "atom": {
+    "rewriteTsconfig": true
+  }
 }

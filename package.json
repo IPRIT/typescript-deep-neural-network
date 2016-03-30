@@ -4,7 +4,7 @@
   "description": "A deep neural network written on ES2015: (Class classifying, Iris data learning)",
   "scripts": {
     "install": "npm i -g tsd && npm i -g tsc && tsd install",
-    "start": "tsc -t ES5 && node app.js --harmony"
+    "start": "tsc && node app.js --harmony"
   },
   "repository": {
     "type": "git",
