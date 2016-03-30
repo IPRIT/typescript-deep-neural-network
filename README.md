@@ -1,5 +1,5 @@
-# neural-network-es6
-A deep neural network written on ES2015: (Class classifying, Iris data learning)
+# TypeScript Deep Neural Network
+A deep neural network written on ES2015/TypeScript: (Class classifying, Iris data learning)
 
 ```
 $ npm run install && npm run start
