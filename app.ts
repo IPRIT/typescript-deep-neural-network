@@ -3,6 +3,7 @@ import {Network} from "./Neuro/Network/Network";
 import Timing from "./Utils/Timing";
 import {TestDataProvider, IrisDataProvider} from "./Neuro/Data/DataProvider";
 import {DataMixer} from "./Neuro/Data/DataMixer";
+import {DataNormalizer} from "./Neuro/Data/DataNormalizer";
 
 /*let activationFunction = new SigmoidActivationFunction();
 
@@ -30,6 +31,8 @@ let provider = new TestDataProvider();
 let [input, output] = [provider.getInput(), provider.getOutput()];
 
 let mixer = new DataMixer();
-console.log(input, output, '\nMixed:');
 [input, output] = mixer.mixAll(input, output);
-console.log(input, output);
+
+let normalizer = new DataNormalizer();
+input = normalizer.normalize(input);
+console.log(input);

@@ -24,9 +24,9 @@ export class Neuron implements INeuron {
     }
     let e = vector.reduce((sum, x, currentIndex) => {
       return sum + x * this.weights[currentIndex];
-    }, 0);
+    }, this.lowerBound);
 
-    return this.activationFunction.compute(e + this.lowerBound);
+    return this.activationFunction.compute(e);
   }
 
   initialize() {

@@ -6,8 +6,14 @@ interface INormalizable {
 export class DataNormalizer implements INormalizable {
 
     normalize(input, from = 0, to = 1) {
-
-
-        return <any>{};
+        if (from >= to) {
+            throw new Error('Invalid normalizing interval');
+        }
+        return <number[][]>input.map(vector => {
+            let [max, min] = [Math.max(...vector), Math.min(...vector)];
+            return vector.map(scalar => {
+                return (((scalar - min) * (to - from)) / (max - min)) + from;
+            });
+        });
     }
 }
