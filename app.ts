@@ -27,9 +27,15 @@ let network = new Network([{
 
 let network = new Network([{
   neuronsInputsNumber: 2,
-  neuronsNumber: 3,
+  neuronsNumber: 2,
+  activationFunction
+}, {
+  neuronsInputsNumber: 2,
+  neuronsNumber: 2,
   activationFunction
 }]);
+
+network.initialize();
 
 
 let provider = new TestDataProvider();
@@ -41,7 +47,7 @@ let mixer = new DataMixer();
 let normalizer = new DataNormalizer();
 input = normalizer.normalize(input);
 
-let learningMethod = new BackPropagationLearning(network, 0.1);
+let learningMethod = new BackPropagationLearning(network, 0.2);
 let learning = new Learning(learningMethod);
 
 let itemsPart = 0.8;
@@ -68,4 +74,4 @@ let learnInterval = setInterval(() => {
     console.log('Done!');
     clearInterval(learnInterval);
   }
-}, 100);
+}, 1000);

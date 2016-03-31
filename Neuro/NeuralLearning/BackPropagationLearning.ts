@@ -25,6 +25,9 @@ export class BackPropagationLearning implements INeuralLearningStrategy {
   }
 
   learn(input: number[][], output: number[][]) {
+    if (input.length !== output.length) {
+      throw new Error('Specified vectors havent equally lengths');
+    }
     return input.reduce((accumulator, vector, vectorIndex) => {
       return accumulator + this.iterate(vector, output[vectorIndex]);
     }, 0);
