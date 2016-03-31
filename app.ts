@@ -9,6 +9,7 @@ import {Learning} from "./Neuro/NeuralLearning/Learning";
 
 let activationFunction = new SigmoidActivationFunction();
 
+/*
 let network = new Network([{
   neuronsInputsNumber: 4,
   neuronsNumber: 4,
@@ -22,6 +23,14 @@ let network = new Network([{
   neuronsNumber: 3,
   activationFunction
 }]);
+*/
+
+let network = new Network([{
+  neuronsInputsNumber: 2,
+  neuronsNumber: 3,
+  activationFunction
+}]);
+
 
 let provider = new TestDataProvider();
 let [input, output] = [provider.getInput(), provider.getOutput()];
@@ -35,20 +44,28 @@ input = normalizer.normalize(input);
 let learningMethod = new BackPropagationLearning(network, 0.1);
 let learning = new Learning(learningMethod);
 
-for (;;) {
-  let itemsPart = 0.8;
-  learning.learn(input.slice(0, input.length * itemsPart), output.slice(0, input.length * itemsPart));
+let itemsPart = 0.8;
+let learnInput = input.slice(0, Math.round(input.length * itemsPart));
+let learnOutput = output.slice(0, Math.round(output.length * itemsPart));
 
-  let learnErrors = learning.getErrorOnTestData(input.slice(0, input.length * itemsPart), output.slice(0, input.length * itemsPart));
-  let learnCorrectlyNumber = learning.getCorrectlyNumber(input.slice(0, input.length * itemsPart), output.slice(0, input.length * itemsPart));
-  console.log(`Input: errors: ${learnErrors}; Accepted: ${learnCorrectlyNumber} of ${input.length * itemsPart}`);
+itemsPart = 1 - itemsPart;
+let testInput = input.slice(Math.round(-input.length * itemsPart));
+let testOutput = output.slice(Math.round(-output.length * itemsPart));
 
-  itemsPart = 1 - itemsPart;
-  let testErrors = learning.getErrorOnTestData(input.slice(-input.length * itemsPart), output.slice(-input.length * itemsPart));
-  let testCorrectlyNumber = learning.getCorrectlyNumber(input.slice(-input.length * itemsPart), output.slice(-input.length * itemsPart));
-  console.log(`Input: errors: ${testErrors}; Accepted: ${testCorrectlyNumber} of ${input.length * itemsPart}`);
+let learnInterval = setInterval(() => {
+  learning.learn(learnInput, learnOutput);
+
+  let learnErrors = learning.getErrorOnTestData(learnInput, learnOutput);
+  let learnCorrectlyNumber = learning.getCorrectlyNumber(learnInput, learnOutput);
+  console.log(`Input: errors: ${learnErrors}; Accepted: ${learnCorrectlyNumber} of ${learnInput.length}`);
+
+
+  let testErrors = learning.getErrorOnTestData(testInput, testOutput);
+  let testCorrectlyNumber = learning.getCorrectlyNumber(testInput, testOutput);
+  console.log(`Input: errors: ${testErrors}; Accepted: ${testCorrectlyNumber} of ${testInput.length}`);
 
   if (learnErrors < 4) {
-    break;
+    console.log('Done!');
+    clearInterval(learnInterval);
   }
-}
+}, 100);

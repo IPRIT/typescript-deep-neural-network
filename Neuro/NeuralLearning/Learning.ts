@@ -42,7 +42,13 @@ export class Learning {
       let output = network.compute(vector);
       let maxOutputScalar = Math.max(...output),
         maxOutputScalarIndex = output.indexOf(maxOutputScalar);
+
+      //console.log('Real:', maxOutputScalarIndex, maxOutputScalar);
+
       let wishedMaxIndex = wishedOutput[vectorIndex].indexOf(Math.max(...wishedOutput[vectorIndex]));
+
+      //console.log('Wished:', wishedMaxIndex);
+
       if (maxOutputScalarIndex === wishedMaxIndex && maxOutputScalar > this.trustyThreshold) {
         return output.every((outputScalar, outputScalarIndex) => {
           return outputScalarIndex === maxOutputScalarIndex || outputScalar <= maxOutputScalar / 2;
