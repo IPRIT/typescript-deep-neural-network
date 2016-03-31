@@ -12,6 +12,7 @@ export class Neuron implements INeuron {
 
   weights: number[] = [];
   lowerBound: number;
+  lastOutput: number;
 
   constructor(public inputsNumber: number, public activationFunction: IActivationFunction) {
     this.weights = new Array(inputsNumber);
@@ -26,7 +27,7 @@ export class Neuron implements INeuron {
       return sum + x * this.weights[currentIndex];
     }, this.lowerBound);
 
-    return this.activationFunction.compute(e);
+    return (this.lastOutput = this.activationFunction.compute(e));
   }
 
   initialize() {
