@@ -12,7 +12,7 @@ interface IDataProvider {
 export class TestDataProvider implements IDataProvider {
 
   private classGenerator: ClassGenerator;
-  private data: any;
+  public data: any;
   private isGenerated: boolean = false;
 
   getInput() {

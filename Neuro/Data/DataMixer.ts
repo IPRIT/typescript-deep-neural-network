@@ -6,7 +6,7 @@ interface IMixerProvider<T> {
 
 export class DataMixer implements IMixerProvider<number[][]> {
 
-    static EPS: number = 1e-10;
+    static EPS: number = 1e-6;
 
     mix(input: number[][], cb?: Function) {
         let dimension = input[0].length;

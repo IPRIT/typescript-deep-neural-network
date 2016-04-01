@@ -11,12 +11,11 @@ interface INeuron extends IComputable<number[], number> {
 export class Neuron implements INeuron {
 
   weights: number[] = [];
-  lowerBound: number;
+  threshold: number;
   lastOutput: number;
 
   constructor(public inputsNumber: number, public activationFunction: IActivationFunction) {
-    this.weights = new Array(inputsNumber);
-    this.initialize();
+    //this.initialize();
   }
 
   compute(vector: number[]) {
@@ -25,15 +24,17 @@ export class Neuron implements INeuron {
     }
     let e = vector.reduce((sum, x, currentIndex) => {
       return sum + x * this.weights[currentIndex];
-    }, this.lowerBound);
+    }, 0) + this.threshold;
 
     return (this.lastOutput = this.activationFunction.compute(e));
   }
 
   initialize() {
+    var seedrandom = require('seedrandom');
+    seedrandom('neuro', { global: true });
     for (let i = 0; i < this.inputsNumber; ++i) {
-      this.weights[i] = Math.random();
+      this.weights.push(Math.random());
     }
-    this.lowerBound = Math.random();
+    this.threshold = Math.random();
   }
 }

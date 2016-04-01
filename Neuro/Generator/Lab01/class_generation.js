@@ -46,12 +46,12 @@ function generate(cross, classNumber, classDimension, classPointsNumber, minDist
         var currentClass = {
             center,
             points: [],
-            radius: minDistanceBetween / 2
+            radius: minDistanceBetween / 2.2
         };
         if (cross) {
             let prob = Point.randomNumber(0, 1);
             if (prob) {
-                currentClass.radius *= 2;
+                currentClass.radius *= 3;
             }
         }
         for (let i = 0; i < classPointsNumber; ++i) {

@@ -6,6 +6,7 @@ import {DataMixer} from "./Neuro/Data/DataMixer";
 import {DataNormalizer} from "./Neuro/Data/DataNormalizer";
 import {BackPropagationLearning} from "./Neuro/NeuralLearning/BackPropagationLearning";
 import {Learning} from "./Neuro/NeuralLearning/Learning";
+import showClusters from "./frontend/app";
 
 let activationFunction = new SigmoidActivationFunction();
 
@@ -33,6 +34,10 @@ let network = new Network([{
   neuronsInputsNumber: 2,
   neuronsNumber: 2,
   activationFunction
+}, {
+  neuronsInputsNumber: 2,
+  neuronsNumber: 4,
+  activationFunction
 }]);
 
 network.initialize();
@@ -47,7 +52,7 @@ let mixer = new DataMixer();
 let normalizer = new DataNormalizer();
 input = normalizer.normalize(input);
 
-let learningMethod = new BackPropagationLearning(network, 0.2);
+let learningMethod = new BackPropagationLearning(network, 0.0001);
 let learning = new Learning(learningMethod);
 
 let itemsPart = 0.8;
@@ -58,20 +63,20 @@ itemsPart = 1 - itemsPart;
 let testInput = input.slice(Math.round(-input.length * itemsPart));
 let testOutput = output.slice(Math.round(-output.length * itemsPart));
 
-let learnInterval = setInterval(() => {
+for (;;) {
   learning.learn(learnInput, learnOutput);
 
-  let learnErrors = learning.getErrorOnTestData(learnInput, learnOutput);
+  let learnError = learning.getErrorOnTestData(learnInput, learnOutput);
   let learnCorrectlyNumber = learning.getCorrectlyNumber(learnInput, learnOutput);
-  console.log(`Input: errors: ${learnErrors}; Accepted: ${learnCorrectlyNumber} of ${learnInput.length}`);
+  //console.log(`Input: errors: ${learnError}; Accepted: ${learnCorrectlyNumber} of ${learnInput.length}`);
 
 
-  let testErrors = learning.getErrorOnTestData(testInput, testOutput);
+  let testError = learning.getErrorOnTestData(testInput, testOutput);
   let testCorrectlyNumber = learning.getCorrectlyNumber(testInput, testOutput);
-  console.log(`Input: errors: ${testErrors}; Accepted: ${testCorrectlyNumber} of ${testInput.length}`);
+  //console.log(`Input: errors: ${testError}; Accepted: ${testCorrectlyNumber} of ${testInput.length}`);
 
-  if (learnErrors < 4) {
+  if (learnError < 5) {
     console.log('Done!');
-    clearInterval(learnInterval);
+    break;
   }
-}, 1000);
+}

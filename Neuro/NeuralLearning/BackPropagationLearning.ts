@@ -44,7 +44,7 @@ export class BackPropagationLearning implements INeuralLearningStrategy {
 
   private computeIterationError(totalOutput: number[], wishedVector: number[]) {
     let layersNumber = this.network.length;
-    let currentLayer = this.network.layers.slice(-1)[0];
+    let currentLayer = <Layer>this.network.layers.slice(-1)[0];
 
     let totalError = totalOutput.reduce((error, output, outputIndex) => {
       let e = wishedVector[outputIndex] - output;
@@ -53,16 +53,14 @@ export class BackPropagationLearning implements INeuralLearningStrategy {
       return error + e * e;
     }, 0);
 
-    //todo: revert if no ideas
-    let layersReversed = this.network.layers.concat().reverse();
-    layersReversed.forEach((layer, layerIndex) => {
-      if (!layerIndex) return;
-      let prevLayer = layersReversed[layerIndex - 1];
+    let layers = this.network.layers;
+    layers.slice(0, -1).forEach((layer, layerIndex) => {
+      let nextLayer = layers[layerIndex + 1];
       let currentLayerErrors = this.neuronErrors[layerIndex];
-      let previousLayerErrors = this.neuronErrors[layerIndex - 1];
+      let nextLayerErrors = this.neuronErrors[layerIndex + 1];
       layer.neurons.forEach((neuron, neuronOuterIndex) => {
-        currentLayerErrors[neuronOuterIndex] = prevLayer.neurons.reduce((errorSum, neuron, neuronIndex) => {
-          return errorSum + previousLayerErrors[neuronIndex] * neuron.weights[neuronOuterIndex];
+        currentLayerErrors[neuronOuterIndex] = nextLayer.neurons.reduce((errorSum, neuron, neuronIndex) => {
+          return errorSum + nextLayerErrors[neuronIndex] * neuron.weights[neuronOuterIndex];
         }, 0) * neuron.activationFunction.derivativeFrom(neuron.lastOutput);
       });
     });
@@ -71,15 +69,15 @@ export class BackPropagationLearning implements INeuralLearningStrategy {
   }
 
   private computeUpdates(inputVector: number[]) {
-    let neuronWeightsUpdates: number[];
     this.network.layers.forEach((layer, layerIndex) => {
       let previousLayer: Layer;
       if (layerIndex) {
         previousLayer = this.network.layers[layerIndex - 1];
       }
+      let errors = this.neuronErrors;
       layer.neurons.forEach((neuron, neuronIndex) => {
-        let learningError = this.n * this.neuronErrors[layerIndex][neuronIndex];
-        (neuronWeightsUpdates = this.weightUpdates[layerIndex][neuronIndex]).map((weightUpdate, weightUpdateIndex) => {
+        let learningError = this.n * errors[layerIndex][neuronIndex];
+        this.weightUpdates[layerIndex][neuronIndex].map((weightUpdate, weightUpdateIndex) => {
           return learningError * (
             layerIndex > 0 ?
               previousLayer.neurons[weightUpdateIndex].lastOutput : inputVector[weightUpdateIndex]
@@ -96,7 +94,7 @@ export class BackPropagationLearning implements INeuralLearningStrategy {
         neuron.weights.map((weight, weightIndex) => {
           return weight + this.weightUpdates[layerIndex][neuronIndex][weightIndex];
         });
-        (<Neuron>neuron).lowerBound += this.boundUpdates[layerIndex][neuronIndex];
+        neuron.threshold += this.boundUpdates[layerIndex][neuronIndex];
       })
     });
   }

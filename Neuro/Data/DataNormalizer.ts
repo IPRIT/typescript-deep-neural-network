@@ -5,14 +5,26 @@ interface INormalizable {
 
 export class DataNormalizer implements INormalizable {
 
-    normalize(input, from = 0, to = 1) {
+    normalize(input: number[][], from = 0, to = 1) {
         if (from >= to) {
             throw new Error('Invalid normalizing interval');
         }
-        return <number[][]>input.map(vector => {
-            let [max, min] = [Math.max(...vector), Math.min(...vector)];
-            return vector.map(scalar => {
-                return (((scalar - min) * (to - from)) / (max - min)) + from;
+        let [minValues, maxValues] = [[], []];
+        for (let i = 0; i < input[0].length; ++i) {
+            minValues.push(Number.MAX_VALUE);
+            maxValues.push(Number.MIN_VALUE);
+        }
+        input.forEach((vector, vectorIndex) => {
+            vector.forEach((x, i) => {
+                minValues[i] = Math.min(x, minValues[i]);
+                maxValues[i] = Math.max(x, maxValues[i]);
+            })
+        });
+
+        return input.map((vector, vectorIndex) => {
+            return vector.map((scalar, scalarIndex) => {
+                return (((scalar - minValues[scalarIndex]) * (to - from))
+                  / (maxValues[scalarIndex] - minValues[scalarIndex])) + from;
             });
         });
     }

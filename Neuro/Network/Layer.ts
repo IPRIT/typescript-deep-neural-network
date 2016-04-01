@@ -20,6 +20,7 @@ export interface ILayerDeclaration {
 export class Layer implements ILayer {
 
   neurons: Neuron[] = [];
+  lastOutput: number[];
 
   constructor(
     neuronsNumber: number,
@@ -32,7 +33,9 @@ export class Layer implements ILayer {
   }
 
   compute(vector: number[]) {
-    return this.neurons.map(neuron => neuron.compute(vector));
+    return (this.lastOutput = this.neurons.map(neuron => {
+      return neuron.compute(vector);
+    }));
   }
 
   get length() {
