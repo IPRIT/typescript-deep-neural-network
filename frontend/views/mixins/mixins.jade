@@ -1,0 +1,13 @@
+mixin js(url)
+    script(src!=url, type='text/javascript')
+
+mixin js_list(urls)
+    each url in urls
+        +js(url)
+
+mixin css(url)
+    link(href= url, type='text/css', rel='stylesheet')
+
+mixin css_list(urls)
+    each url in urls
+        +css(url)

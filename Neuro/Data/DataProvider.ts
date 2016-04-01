@@ -3,7 +3,7 @@ import * as Config from '../Generator/config';
 //noinspection TypeScriptCheckImport
 import * as fs from 'fs';
 
-interface IDataProvider {
+export interface IDataProvider {
 
   getInput(): Array<Array<number>>;
   getOutput(): Array<Array<number>>;
@@ -52,7 +52,7 @@ export class TestDataProvider implements IDataProvider {
     return Config.CLASSES_CONF;
   }
 
-  private generate() {
+  generate() {
     this.classGenerator = new ClassGenerator();
     this.classGenerator.configure(Config.CLASSES_CONF);
     this.data = this.classGenerator.generate();

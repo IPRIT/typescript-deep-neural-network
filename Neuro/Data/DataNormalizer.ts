@@ -5,7 +5,7 @@ interface INormalizable {
 
 export class DataNormalizer implements INormalizable {
 
-    normalize(input: number[][], from = 0, to = 1) {
+    normalize(input: number[][], from: number = 0, to: number = 1) {
         if (from >= to) {
             throw new Error('Invalid normalizing interval');
         }
@@ -21,7 +21,7 @@ export class DataNormalizer implements INormalizable {
             })
         });
 
-        return input.map((vector, vectorIndex) => {
+        return <number[][]>input.map((vector, vectorIndex) => {
             return vector.map((scalar, scalarIndex) => {
                 return (((scalar - minValues[scalarIndex]) * (to - from))
                   / (maxValues[scalarIndex] - minValues[scalarIndex])) + from;

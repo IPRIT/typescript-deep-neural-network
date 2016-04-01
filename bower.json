@@ -1,0 +1,24 @@
+{
+  "name": "TypeScript-Neuro",
+  "version": "0.0.1",
+  "authors": [
+    "Alexander Belov <ipritoflex@yandex.ru>"
+  ],
+  "main": "app.js",
+  "keywords": [
+    "angular",
+    "neuro"
+  ],
+  "license": "BSD",
+  "ignore": [
+    "frontend/app/bower_components"
+  ],
+  "dependencies": {
+    "angular": "~1.3.15",
+    "angular-sanitize": "~1.3.15",
+    "angular-route": "~1.3.15",
+    "angular-ui-router": "~0.2.15",
+    "angular-material": "~1.0.6",
+    "angular-messages": "~1.4.7"
+  }
+}

@@ -90,7 +90,7 @@ export class BackPropagationLearning implements INeuralLearningStrategy {
 
   private updateNetwork() {
     this.network.layers.forEach((layer, layerIndex) => {
-      layer.neurons.forEach((neuron, neuronIndex) => {
+      layer.neurons.forEach((neuron: Neuron, neuronIndex) => {
         neuron.weights.map((weight, weightIndex) => {
           return weight + this.weightUpdates[layerIndex][neuronIndex][weightIndex];
         });

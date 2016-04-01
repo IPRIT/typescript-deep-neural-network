@@ -1,0 +1,9 @@
+include mixins/mixins
+
+doctype html
+html(ng-controller='PageCtrl', ng-app='Neuro')
+    head
+        base(href='/')
+        include index/head
+    body(ng-controller='AppCtrl')
+        block content
