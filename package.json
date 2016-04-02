@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A deep neural network written on ES2015/TypeScript: (Class classifying, Iris data learning)",
   "scripts": {
-    "install": "npm i -g tsd && npm i -g tsc && tsd install && npm i",
+    "install": "npm i -g tsd && npm i bower -g && npm i -g tsc && tsd install && npm i && bower i",
     "start": "tsc && node app.js --harmony"
   },
   "repository": {

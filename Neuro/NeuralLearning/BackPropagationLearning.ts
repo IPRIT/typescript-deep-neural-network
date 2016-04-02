@@ -28,9 +28,11 @@ export class BackPropagationLearning implements INeuralLearningStrategy {
     if (input.length !== output.length) {
       throw new Error('Specified vectors havent equally lengths');
     }
-    return input.reduce((accumulator, vector, vectorIndex) => {
+    let error = input.reduce((accumulator, vector, vectorIndex) => {
       return accumulator + this.iterate(vector, output[vectorIndex]);
     }, 0);
+
+    return error;
   }
 
   private iterate(inputVector: number[], outputVector: number[]): number {
@@ -50,20 +52,21 @@ export class BackPropagationLearning implements INeuralLearningStrategy {
       let e = wishedVector[outputIndex] - output;
       this.neuronErrors[layersNumber - 1][outputIndex] = e *
         currentLayer.neurons[outputIndex].activationFunction.derivativeFrom(output);
-      return error + e * e;
+      return error + (e * e);
     }, 0);
 
     let layers = this.network.layers;
-    layers.slice(0, -1).forEach((layer, layerIndex) => {
-      let nextLayer = layers[layerIndex + 1];
-      let currentLayerErrors = this.neuronErrors[layerIndex];
-      let nextLayerErrors = this.neuronErrors[layerIndex + 1];
+    for (var layerIndex = layersNumber - 2; layerIndex >= 0; --layerIndex) {
+      var layer = layers[layerIndex];
+      var nextLayer = layers[layerIndex + 1];
+      var currentLayerErrors = this.neuronErrors[layerIndex];
+      var nextLayerErrors = this.neuronErrors[layerIndex + 1];
       layer.neurons.forEach((neuron, neuronOuterIndex) => {
         currentLayerErrors[neuronOuterIndex] = nextLayer.neurons.reduce((errorSum, neuron, neuronIndex) => {
           return errorSum + nextLayerErrors[neuronIndex] * neuron.weights[neuronOuterIndex];
         }, 0) * neuron.activationFunction.derivativeFrom(neuron.lastOutput);
       });
-    });
+    }
 
     return totalError / 2;
   }

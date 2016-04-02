@@ -1,9 +1,9 @@
 export const CLASSES_CONF = {
-  classNumber: 50,
+  classNumber: 2,
   classDimension: 2,
   classPointsNumber: 100,
-  minDistanceBetween: 50,
-  cross: true,
+  minDistanceBetween: 300,
+  cross: false,
   minBoundary: 100,
-  maxBoundary: 700
+  maxBoundary: 600
 };

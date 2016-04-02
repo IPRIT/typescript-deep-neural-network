@@ -51,7 +51,7 @@ function generate(cross, classNumber, classDimension, classPointsNumber, minDist
         if (cross) {
             let prob = Point.randomNumber(0, 1);
             if (prob) {
-                currentClass.radius *= 1.5;
+                currentClass.radius *= 2;
             }
         }
         for (let i = 0; i < classPointsNumber; ++i) {

@@ -15,7 +15,6 @@ export class Neuron implements INeuron {
   lastOutput: number;
 
   constructor(public inputsNumber: number, public activationFunction: IActivationFunction) {
-    //this.initialize();
   }
 
   compute(vector: number[]) {
@@ -30,8 +29,8 @@ export class Neuron implements INeuron {
   }
 
   initialize() {
-    var seedrandom = require('seedrandom');
-    seedrandom('neuro', { global: true });
+    //var seedrandom = require('seedrandom');
+    //seedrandom('neuro', { global: true });
     for (let i = 0; i < this.inputsNumber; ++i) {
       this.weights.push(Math.random());
     }

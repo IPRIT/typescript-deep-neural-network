@@ -9,8 +9,7 @@ export class DataMixer implements IMixerProvider<number[][]> {
     static EPS: number = 1e-6;
 
     mix(input: number[][], cb?: Function) {
-        let dimension = input[0].length;
-        let output: number[][] = input.concat(); // get cloned array
+        let output: number[][] = [].concat(input); // get cloned array
         input.forEach((vector, outerIndex) => {
             let changed = false;
             while (!changed) {

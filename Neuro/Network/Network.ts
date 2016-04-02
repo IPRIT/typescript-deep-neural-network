@@ -28,8 +28,10 @@ export class Network implements INetwork {
 
   compute(vector: number[]) {
     return (
-      this.lastOutput = this.layers.reduce((previousVector, layer, layerIndex) => {
-        return layer.compute(previousVector);
+      this.lastOutput = this.layers.reduce((previousVector, layer: Layer, layerIndex) => {
+        let lastOutput = this.lastOutput;
+        let output = layer.compute(previousVector);
+        return output;
       }, vector)
     );
   }

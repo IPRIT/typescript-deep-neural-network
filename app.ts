@@ -12,29 +12,29 @@ function learningTest(provider: IDataProvider) {
   let activationFunction = new SigmoidActivationFunction();
 
   let network = new Network([{
-    neuronsInputsNumber: 2,
-    neuronsNumber: 2,
-    activationFunction
-  }, {
-    neuronsInputsNumber: 2,
-    neuronsNumber: 10,
-    activationFunction
-  }, {
-    neuronsInputsNumber: 10,
+    neuronsInputsNumber: 4,
     neuronsNumber: 4,
+    activationFunction
+  }, {
+    neuronsInputsNumber: 4,
+    neuronsNumber: 4,
+    activationFunction
+  }, {
+    neuronsInputsNumber: 4,
+    neuronsNumber: 3,
     activationFunction
   }]);
   network.initialize();
 
   let [input, output] = [provider.getInput(), provider.getOutput()];
 
-  let mixer = new DataMixer();
-  [input, output] = mixer.mixAll(input, output);
-
   let normalizer = new DataNormalizer();
   input = normalizer.normalize(input);
 
-  let learningMethod = new BackPropagationLearning(network, 0.001);
+  let mixer = new DataMixer();
+  //[input, output] = mixer.mixAll(input, output);
+
+  let learningMethod = new BackPropagationLearning(network, 0.1);
   let learning = new Learning(learningMethod);
 
   let itemsPart = 0.8;
@@ -57,15 +57,18 @@ function learningTest(provider: IDataProvider) {
     let testCorrectlyNumber = learning.getCorrectlyNumber(testInput, testOutput);
     console.log(`Input: errors: ${testError}; Accepted: ${testCorrectlyNumber} of ${testInput.length}`);
 
+    if (learnError < 40) {
+      //console.log('Min err');
+    }
     if (learnError < 5) {
-      console.log('Done!');
+      console.log('Learning has done.');
       clearInterval(interval);
     }
-  }, 1000);
+  }, 10);
 }
 
-let dataProvider = new TestDataProvider();
-dataProvider.generate();
+let dataProvider = new IrisDataProvider();
+dataProvider.initialize();
 
 showClusters(dataProvider.data);
 learningTest(dataProvider);

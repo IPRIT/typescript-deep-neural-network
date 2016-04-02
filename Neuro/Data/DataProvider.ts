@@ -53,6 +53,7 @@ export class TestDataProvider implements IDataProvider {
   }
 
   generate() {
+    this.isGenerated = true;
     this.classGenerator = new ClassGenerator();
     this.classGenerator.configure(Config.CLASSES_CONF);
     this.data = this.classGenerator.generate();
@@ -62,7 +63,7 @@ export class TestDataProvider implements IDataProvider {
 export class IrisDataProvider implements IDataProvider {
 
   outputs: number[] = [];
-  private data: any;
+  public data: any;
   private isInit: boolean = false;
   private classes: number = 3;
 
@@ -71,8 +72,7 @@ export class IrisDataProvider implements IDataProvider {
       this.initialize();
     }
     return <number[][]>this.data.map(vector => {
-      vector.pop();
-      return vector;
+      return vector.slice(0, -1);
     });
   }
 
@@ -81,7 +81,7 @@ export class IrisDataProvider implements IDataProvider {
       this.initialize();
     }
     return <number[][]>this.data.map(vector => {
-      let classNumber = vector.pop();
+      let classNumber = vector.slice(-1)[0];
       return Array
           .apply(null, Array(this.classes))
           .map(Number.prototype.valueOf, 0)
@@ -92,6 +92,7 @@ export class IrisDataProvider implements IDataProvider {
   }
 
   initialize() {
+    this.isInit = true;
     //noinspection TypeScriptUnresolvedFunction
     let data = fs.readFileSync('./Neuro/Data/input/iris.txt', 'utf8');
     //noinspection TypeScriptUnresolvedVariable
