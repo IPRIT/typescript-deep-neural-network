@@ -80,7 +80,7 @@ export class BackPropagationLearning implements INeuralLearningStrategy {
       let errors = this.neuronErrors;
       layer.neurons.forEach((neuron, neuronIndex) => {
         let learningError = this.n * errors[layerIndex][neuronIndex];
-        this.weightUpdates[layerIndex][neuronIndex].map((weightUpdate, weightUpdateIndex) => {
+        this.weightUpdates[layerIndex][neuronIndex] = this.weightUpdates[layerIndex][neuronIndex].map((weightUpdate, weightUpdateIndex) => {
           return learningError * (
             layerIndex > 0 ?
               previousLayer.neurons[weightUpdateIndex].lastOutput : inputVector[weightUpdateIndex]
@@ -94,7 +94,7 @@ export class BackPropagationLearning implements INeuralLearningStrategy {
   private updateNetwork() {
     this.network.layers.forEach((layer, layerIndex) => {
       layer.neurons.forEach((neuron: Neuron, neuronIndex) => {
-        neuron.weights.map((weight, weightIndex) => {
+        neuron.weights = neuron.weights.map((weight, weightIndex) => {
           return weight + this.weightUpdates[layerIndex][neuronIndex][weightIndex];
         });
         neuron.threshold += this.boundUpdates[layerIndex][neuronIndex];

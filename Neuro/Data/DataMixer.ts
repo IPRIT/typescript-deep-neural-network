@@ -24,10 +24,12 @@ export class DataMixer implements IMixerProvider<number[][]> {
         return output;
     }
 
-    mixAll(input: number[][], output: number[][]) {
-        input = this.mix(input, (i, j) => {
-            [output[i], output[j]] = [output[j], output[i]];
-        });
+    mixAll(input: number[][], output: number[][], repeat: number = 1) {
+        while (repeat--) {
+            input = this.mix(input, (i, j) => {
+                [output[i], output[j]] = [output[j], output[i]];
+            });
+        }
         return [input, output];
     }
 

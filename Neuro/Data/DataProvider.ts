@@ -1,5 +1,5 @@
 import ClassGenerator from '../Generator/ClassGenerator';
-import * as Config from '../Generator/config';
+import * as Config from '../config';
 //noinspection TypeScriptCheckImport
 import * as fs from 'fs';
 
@@ -7,6 +7,13 @@ export interface IDataProvider {
 
   getInput(): Array<Array<number>>;
   getOutput(): Array<Array<number>>;
+  initialize(): void;
+  data: any;
+}
+
+export enum DataType {
+  GENERATE,
+  IRIS
 }
 
 export class TestDataProvider implements IDataProvider {
@@ -17,7 +24,7 @@ export class TestDataProvider implements IDataProvider {
 
   getInput() {
     if (!this.isGenerated) {
-      this.generate();
+      this.initialize();
     }
     return this.data.map(cluster => {
       return cluster.points.map(vector => {
@@ -30,7 +37,7 @@ export class TestDataProvider implements IDataProvider {
 
   getOutput() {
     if (!this.isGenerated) {
-      this.generate();
+      this.initialize();
     }
     return this.data.map((cluster, clusterIndex) => {
       let clusterOutput = []; //вектора кластера
@@ -52,7 +59,7 @@ export class TestDataProvider implements IDataProvider {
     return Config.CLASSES_CONF;
   }
 
-  generate() {
+  initialize() {
     this.isGenerated = true;
     this.classGenerator = new ClassGenerator();
     this.classGenerator.configure(Config.CLASSES_CONF);
@@ -97,7 +104,7 @@ export class IrisDataProvider implements IDataProvider {
     let data = fs.readFileSync('./Neuro/Data/input/iris.txt', 'utf8');
     //noinspection TypeScriptUnresolvedVariable
     let isWin = /^win/.test(process.platform);
-    let splitChars = isWin ? '\r\n' : '\n';
+    let splitChars = isWin ? '\n' : '\n';
     this.data = data.split(splitChars).map(line => {
       return line.trim().split(/\s/).map(parseFloat);
     });
