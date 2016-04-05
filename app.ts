@@ -14,7 +14,7 @@ function learningTest(provider: IDataProvider) {
   let activationFunction = new SigmoidActivationFunction();
   let network: Network;
 
-  let [inputConfig, classesConfig] = [Config.INPUT_DATA_CONF, Config.CLASSES_CONF];
+  let [inputConfig, classesConfig, learningConfig] = [Config.INPUT_DATA_CONF, Config.CLASSES_CONF, Config.LEARNING_CONF];
 
   function getLayersDeclaration() : ILayerDeclaration[] {
     let layersDeclaration: ILayerDeclaration[] = [];
@@ -67,7 +67,7 @@ function learningTest(provider: IDataProvider) {
   let mixer = new DataMixer();
   [input, output] = mixer.mixAll(input, output, 10);
 
-  let learningMethod = new BackPropagationLearning(network, 0.1);
+  let learningMethod = new BackPropagationLearning(network, learningConfig.velocity);
   let learning = new Learning(learningMethod);
 
   let itemsPart = 0.8;
@@ -90,7 +90,7 @@ function learningTest(provider: IDataProvider) {
     let testCorrectlyNumber = learning.getCorrectlyNumber(testInput, testOutput);
     console.log(`Test data error: ${testError}; Accepted: ${testCorrectlyNumber} of ${testInput.length}`);
 
-    if (learnError < 5) {
+    if (learnError < learningConfig.stopWhen) {
       console.log('Learning is done.');
       clearInterval(interval);
     }
