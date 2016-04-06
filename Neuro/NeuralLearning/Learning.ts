@@ -54,4 +54,12 @@ export class Learning {
       return false;
     }).length;
   }
+
+  classify(normalizedVector) {
+    let network = this.methodInstance.network;
+    let output = network.compute(normalizedVector);
+    let maxOutputScalar = Math.max(...output),
+      maxOutputScalarIndex = output.indexOf(maxOutputScalar);
+    return maxOutputScalarIndex;
+  }
 }

@@ -8,6 +8,7 @@ const _classPointsNumber = 50;
 const _minDistanceBetween = 100;
 const _minBoundary = -1000;
 const _maxBoundary = 1000;
+const _radiusCompress = 2;
 
 /**
  * @param {boolean} cross
@@ -19,11 +20,12 @@ const _maxBoundary = 1000;
  * @param {number} maxBoundary
  * @returns {Array} Array of classes
  */
-function generate(cross, classNumber, classDimension, classPointsNumber, minDistanceBetween, minBoundary, maxBoundary) {
+function generate(cross, classNumber, classDimension, classPointsNumber, minDistanceBetween, minBoundary, maxBoundary, radiusCompress) {
     classNumber = classNumber || _classNumber;
     classDimension = classDimension || _classDimension;
     classPointsNumber = classPointsNumber || _classPointsNumber;
     minDistanceBetween = minDistanceBetween || _minDistanceBetween;
+    radiusCompress = radiusCompress || _radiusCompress;
     minBoundary = minBoundary || _minBoundary;
     maxBoundary = maxBoundary || _maxBoundary;
 
@@ -46,12 +48,12 @@ function generate(cross, classNumber, classDimension, classPointsNumber, minDist
         var currentClass = {
             center,
             points: [],
-            radius: minDistanceBetween / 2.2
+            radius: minDistanceBetween / radiusCompress
         };
         if (cross) {
             let prob = Point.randomNumber(0, 1);
             if (prob) {
-                currentClass.radius *= 2;
+                currentClass.radius *= radiusCompress;
             }
         }
         for (let i = 0; i < classPointsNumber; ++i) {

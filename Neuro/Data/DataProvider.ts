@@ -104,7 +104,8 @@ export class IrisDataProvider implements IDataProvider {
     let data = fs.readFileSync('./Neuro/Data/input/iris.txt', 'utf8');
     //noinspection TypeScriptUnresolvedVariable
     let isWin = /^win/.test(process.platform);
-    let splitChars = isWin ? '\n' : '\n';
+    //todo(me): fix when a file will be correctly line-break.
+    let splitChars = isWin && false ? '\r\n' : '\n';
     this.data = data.split(splitChars).map(line => {
       return line.trim().split(/\s/).map(parseFloat);
     });

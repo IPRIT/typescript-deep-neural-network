@@ -4,7 +4,7 @@
 
 angular.module('Neuro.directives', [])
 
-    .directive('clusters', function ($timeout) {
+    .directive('clusters', function ($timeout, $interval, ApiService) {
         return {
             restrict: 'E',
             scope: true,
@@ -12,32 +12,40 @@ angular.module('Neuro.directives', [])
             controller: 'ClustersCtrl',
             link: function (scope, element, attrs) {
                 $timeout(function () {
-                    var clusters = scope.clusters;
-                    if (clusters.length > 0 && clusters[0].hasOwnProperty('points')) {
-                        //it's clusters' array
-                        drawClusters(clusters);
-                    } else if (Array.isArray(clusters)) {
-                        //in other cases this is just vectors' array
-                        drawPoints(clusters);
-                    }
-
+                    render();
                 }, 500);
 
-                function drawClusters(clusters) {
-                    var canvas = element.find('canvas').get(0);
-                    if (!canvas) {
-                        return;
-                    }
-                    canvas.width = element[0].offsetWidth;
-                    canvas.height = element[0].offsetHeight;
-                    var ctx = canvas.getContext('2d');
+                var canvas = element.find('canvas').get(0);
+                if (!canvas) {
+                    return;
+                }
+                canvas.width = element[0].offsetWidth;
+                canvas.height = element[0].offsetHeight;
+                var ctx = canvas.getContext('2d');
+                ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                ctx.shadowBlur = 5;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 1;
 
-                    let radius = 150 / 2.2;
+                function render() {
+                    var clusters = scope.clusters,
+                        settings = scope.settings;
+                    if (clusters.length > 0 && clusters[0].hasOwnProperty('points')) {
+                        //it's clusters' array
+                        drawClusters(clusters, settings);
+                    } else if (Array.isArray(clusters)) {
+                        //in other cases this is just vectors' array
+                        drawPoints(clusters, settings);
+                    }
+                }
+
+                function drawClusters(clusters, settings) {
                     let borders = {
-                        min: 100 - radius,
-                        max: 600 + radius
+                        min: settings.minBoundary - settings.minDistanceBetween,
+                        max: settings.maxBoundary + settings.minDistanceBetween
                     };
 
+                    ctx.strokeStyle = "#222";
                     ctx.beginPath();
                     ctx.moveTo(borders.min, borders.min);
                     ctx.lineTo(borders.min, borders.max);
@@ -58,6 +66,10 @@ angular.module('Neuro.directives', [])
                         alpha = alpha < 0.5 ? alpha + 0.5 : alpha;
 
                         ctx.strokeStyle = "rgba(" + r + ", " + g + ", " + b + "," + alpha + ")";
+                        ctx.shadowColor = "rgba(0,0,0,0.4)";
+                        ctx.shadowOffsetX = 0;
+                        ctx.shadowOffsetY = 1;
+                        ctx.shadowBlur = 5;
                         ctx.beginPath();
                         ctx.arc(cluster.center.coords[0], cluster.center.coords[1], cluster.radius, -2 * Math.PI, 2 * Math.PI, true);
                         ctx.stroke();
@@ -70,18 +82,21 @@ angular.module('Neuro.directives', [])
                             ctx.arc(x, y, 3, -2 * Math.PI, 2 * Math.PI, true);
                             ctx.fill();
                         });
+
+                        var fontSize = 30;
+                        ctx.font = 'bold ' + fontSize + 'px Arial';
+                        ctx.strokeStyle = "#FFF";
+                        ctx.save();
+                        ctx.shadowColor = "#000";
+                        ctx.shadowOffsetX = 0;
+                        ctx.shadowOffsetY = 2;
+                        ctx.shadowBlur = 2;
+                        ctx.strokeText(clusterIndex + 1, cluster.center.coords[0] - (fontSize / 4) * (clusterIndex + 1).toString().length, cluster.center.coords[1] + fontSize / 3);
+                        ctx.restore();
                     });
                 }
 
-                function drawPoints(points) {
-                    var canvas = element.find('canvas').get(0);
-                    if (!canvas) {
-                        return;
-                    }
-                    canvas.width = element[0].offsetWidth;
-                    canvas.height = element[0].offsetHeight;
-                    var ctx = canvas.getContext('2d');
-
+                function drawPoints(points, settings) {
                     var rndWithSeed = new Math.seedrandom(points.length + 10);
                     var r = Math.ceil(rndWithSeed() * 255);
                     var g = Math.ceil(rndWithSeed() * 255);
@@ -100,6 +115,47 @@ angular.module('Neuro.directives', [])
                         ctx.fill();
                     });
                 }
+
+                function drawClickedPoint(point) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    render();
+
+                    ctx.strokeStyle = "#B8890E";
+                    ctx.fillStyle = "rgba(255, 191, 21, 1)";
+                    ctx.shadowColor = "rgba(0,0,0,0.5)";
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 2;
+                    ctx.shadowBlur = 5;
+                    var pointRadius = 5;
+                    ctx.beginPath();
+                    ctx.arc(point.x - pointRadius/2, point.y - pointRadius/2, pointRadius, -2 * Math.PI, 2 * Math.PI, true);
+                    ctx.fill();
+                }
+
+                var canvasWithWrap = element.find('canvas');
+                var updateInterval;
+
+                window.addEventListener('resize', render);
+                canvasWithWrap.on('click', function (ev) {
+                    scope.clickedPoint = { x: ev.offsetX, y: ev.offsetY };
+                    drawClickedPoint(scope.clickedPoint);
+                    if (updateInterval) {
+                        $interval.cancel(updateInterval);
+                    }
+                    updateInterval = $interval(function () {
+                        classifyPoint();
+                    }, 100);
+                    classifyPoint();
+
+                    function classifyPoint() {
+                        ApiService.classifyPoint(scope.clickedPoint).then(function (response) {
+                            if (response.error) {
+                                return alert('Error: ' + response.error);
+                            }
+                            scope.classifiedCluster = response.result.classIndex;
+                        });
+                    }
+                });
             }
         }
     })

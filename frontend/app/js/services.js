@@ -10,8 +10,25 @@ angular.module('Neuro.services', [])
             });
         }
 
+        function getSettings() {
+            return $http.get('/getSettings').then(function (response) {
+                return response.data;
+            });
+        }
+
+        function classifyPoint(params) {
+            params = {
+                point: params
+            };
+            return $http.post('/classifyPoint', params).then(function (response) {
+                return response.data;
+            });
+        }
+
         return {
-            getClusters: getClusters
+            getClusters: getClusters,
+            getSettings: getSettings,
+            classifyPoint: classifyPoint
         }
     }])
 ;

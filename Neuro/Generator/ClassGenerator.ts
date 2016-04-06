@@ -17,6 +17,7 @@ interface IGeneratorConfig {
   cross?: boolean;
   minBoundary?: number;
   maxBoundary?: number;
+  radiusCompress?: number;
 }
 
 export default class ClassGenerator implements IGenerable, IConfigurable {
@@ -31,7 +32,8 @@ export default class ClassGenerator implements IGenerable, IConfigurable {
       return class_generation.generate(
         params.cross, params.classNumber, params.classDimension,
         params.classPointsNumber, params.minDistanceBetween,
-        params.minBoundary, params.maxBoundary
+        params.minBoundary, params.maxBoundary,
+        params.radiusCompress
       );
     }
     return class_generation.generate(...args);

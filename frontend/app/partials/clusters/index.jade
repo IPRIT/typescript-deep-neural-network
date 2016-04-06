@@ -1,1 +1,10 @@
-canvas.clusters-canvas(width='100%', height='100%')
+div(style='width: 100%; height: 100%; overflow: hidden;')
+  md-content.md-padding(ng-switch='classifiedCluster === undefined')
+    div(ng-switch-when='false')
+      p Для точки определен кластер:
+      md-radio-group(ng-model='classifiedCluster', layout='row')
+        md-radio-button.md-primary(ng-repeat='cluster in clusters', value='{{$index}}', ng-disabled='true') {{$index + 1}}
+    div(ng-switch-default)
+      p Нажмите на полотно, чтобы классифицировать точку
+
+  canvas.clusters-canvas(width='100%', height='100%')

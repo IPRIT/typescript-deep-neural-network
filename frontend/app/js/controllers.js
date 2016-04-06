@@ -19,8 +19,13 @@ angular.module('Neuro.controllers', [])
         console.log('Works');
         $scope.clusters = [];
         ApiService.getClusters().then(function (data) {
-            console.log(data);
+            console.log('Clusters:', data);
             $scope.clusters = data;
+        });
+        
+        ApiService.getSettings().then(function (data) {
+            console.log('Settings:', data);
+            $scope.settings = data;
         });
     }])
 ;
