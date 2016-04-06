@@ -9,9 +9,9 @@ let clusters: Array<any>;
 let onAction: Function;
 let isServerAlreadyRunning: boolean = false;
 
-export function showClusters(_clusters, _onAction?: Function) {
+export function showClusters(_clusters, _onAction: Function = ()=>{}) {
   clusters = _clusters;
-  onAction = _onAction || (()=>{});
+  onAction = _onAction;
   runServerInstance();
 }
 

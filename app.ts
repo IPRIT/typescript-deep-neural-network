@@ -6,10 +6,11 @@ import {DataMixer} from "./Neuro/Data/DataMixer";
 import {DataNormalizer} from "./Neuro/Data/DataNormalizer";
 import {BackPropagationLearning} from "./Neuro/NeuralLearning/BackPropagationLearning";
 import {Learning} from "./Neuro/NeuralLearning/Learning";
-import {showClusters} from "./frontend/app";
+import * as View from "./frontend/app";
 import * as Config from './Neuro/config';
 import {ILayerDeclaration} from "./Neuro/Network/Layer";
 
+//noinspection TypeScriptUnresolvedFunction
 let colors = require('colors/safe');
 let normalizer: DataNormalizer;
 
@@ -149,7 +150,7 @@ switch (inputConfig.dataType) {
 dataProvider.initialize();
 
 if (outputConfig.showClusters) {
-  showClusters(dataProvider.data, onAction);
+  View.showClusters(dataProvider.data, onAction);
 }
 
 let learningInstance = learningTest(dataProvider);
@@ -161,7 +162,6 @@ function onAction(ev, callback = () => {}) {
   if (ev && ev.type in actions) {
     actions[ev.type](ev.data, callback);
   }
-  let point = ev.data.point;
 }
 
 function classify(params, callback) {
