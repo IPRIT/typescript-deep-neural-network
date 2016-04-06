@@ -105,7 +105,7 @@ export class IrisDataProvider implements IDataProvider {
     //noinspection TypeScriptUnresolvedVariable
     let isWin = /^win/.test(process.platform);
     //todo(me): fix when a file will be correctly line-break.
-    let splitChars = isWin && false ? '\r\n' : '\n';
+    let splitChars = isWin && false ? '\n' : '\n';
     this.data = data.split(splitChars).map(line => {
       return line.trim().split(/\s/).map(parseFloat);
     });

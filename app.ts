@@ -170,6 +170,10 @@ function classify(params, callback) {
   for (let coord in point) {
     input.push(point[coord]);
   }
+  let dim = learningInstance.methodInstance.network.layers[0].length;
+  input.push(
+    ...(new Array(Math.max(0, dim - input.length)).map(x => 0))
+  );
   let [output] = normalizer.normalizeNext([input]);
   let classIndex = learningInstance.classify(output);
   callback(null, {
