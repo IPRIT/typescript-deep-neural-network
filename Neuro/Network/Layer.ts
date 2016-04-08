@@ -32,9 +32,9 @@ export class Layer implements ILayer {
     }
   }
 
-  compute(vector: number[]) {
-    return (this.lastOutput = this.neurons.map(neuron => {
-      return neuron.compute(vector);
+  compute(vector: number[], pass: boolean = false) {
+    return (this.lastOutput = this.neurons.map((neuron, neuronIndex) => {
+      return neuron.compute(vector, pass, neuronIndex);
     }));
   }
 

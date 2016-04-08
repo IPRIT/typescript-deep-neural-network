@@ -27,7 +27,7 @@ function learningTest(provider: IDataProvider) {
     if (inputConfig.layersDeclarationEnabled
         && inputConfig.layers
         && inputConfig.layers.length) {
-      let lastInputsNumber = classesConfig.classDimension;
+      let lastInputsNumber = inputConfig.dataType === DataType.IRIS ? inputConfig.layers[0].neurons : classesConfig.classDimension;
       layersDeclaration = inputConfig.layers.map((declaration, declarationIndex) => {
         let newDeclaration = {
           neuronsInputsNumber: lastInputsNumber,
@@ -126,7 +126,7 @@ function learningTest(provider: IDataProvider) {
     );
 
     if (learnError < learningConfig.stopWhen) {
-      console.log('Learning is done.');
+      console.log('Learning has been finished.');
       clearInterval(interval);
     }
   }, learningConfig.timeoutBetweenEpochs);

@@ -1,23 +1,23 @@
 export const CLASSES_CONF = {
-  classNumber: 5,
+  classNumber: 15,
   classDimension: 2,
   classPointsNumber: 100,
   minDistanceBetween: 100,
   radiusCompress: 2, // >= 2
   cross: false,
-  minBoundary: 300,
+  minBoundary: 150,
   maxBoundary: 600
 };
 
 export const INPUT_DATA_CONF = {
   dataType: 1, //0 - generate, 1 - Iris flower data set
-  layersDeclarationEnabled: false,
+  layersDeclarationEnabled: true,
   layers: [{
-    neurons: 2
+    neurons: 4
   }, {
-    neurons: 2
+    neurons: 4
   }, {
-    neurons: 5
+    neurons: 3
   }]
 };
 
@@ -29,7 +29,7 @@ export const LEARNING_CONF = {
     diff: -0.01,
     stopWhen: 0.1
   },
-  stopWhen: 5,
+  stopWhen: 1,
   timeoutBetweenEpochs: 0 //ms
 };
 

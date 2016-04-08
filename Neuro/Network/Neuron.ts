@@ -17,9 +17,12 @@ export class Neuron implements INeuron {
   constructor(public inputsNumber: number, public activationFunction: IActivationFunction) {
   }
 
-  compute(vector: number[]) {
+  compute(vector: number[], pass: boolean, neuronIndex: number) {
     if (vector.length !== this.weights.length) {
       throw new RangeError('Specified lengths does not equal');
+    }
+    if (pass) {
+      return (this.lastOutput = vector[neuronIndex]);
     }
     let e = vector.reduce((sum, x, currentIndex) => {
       return sum + x * this.weights[currentIndex];

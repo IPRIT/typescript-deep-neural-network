@@ -29,8 +29,7 @@ export class Network implements INetwork {
   compute(vector: number[]) {
     return (
       this.lastOutput = this.layers.reduce((previousVector, layer: Layer, layerIndex) => {
-        let lastOutput = this.lastOutput;
-        let output = layer.compute(previousVector);
+        let output = layer.compute(previousVector, !layerIndex);
         return output;
       }, vector)
     );
