@@ -1,4 +1,4 @@
-import {CLASSES_CONF} from "../Neuro/config";
+import { CLASSES_CONF } from "../Neuro/config";
 var express = require('express');
 var app = express();
 var path = require('path');
